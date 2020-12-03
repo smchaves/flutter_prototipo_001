@@ -1,20 +1,38 @@
 import 'package:flutter/material.dart';
-import 'package:prototipo/screens/produccion_screen.dart';
+
 import '../models/ordenProduccion.dart';
 import '../models/enums.dart';
 import './detallesOP.dart';
 import '../widgets/main_drawer.dart';
+import '../widgets/chartBar.dart';
 //import 'package:intl/intl.dart';
 
-class OrdenesProduccionScreen extends StatelessWidget {
+class OrdenesProduccionScreen extends StatefulWidget {
   final List<OrdenProduccion> ordenesProduccion;
   final Function _startAddOC;
 
   OrdenesProduccionScreen(this.ordenesProduccion, this._startAddOC);
 
   @override
+  _OrdenesProduccionScreenState createState() =>
+      _OrdenesProduccionScreenState();
+}
+
+class _OrdenesProduccionScreenState extends State<OrdenesProduccionScreen> {
+  void reorderData(int oldIndex, int newIndex) {
+    setState(() {
+      if (newIndex > oldIndex) {
+        newIndex -= 1;
+      }
+      final items = widget.ordenesProduccion.removeAt(oldIndex);
+      widget.ordenesProduccion.insert(newIndex, items);
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    List<OrdenProduccion> ordenesProduccionNoDespachadas = ordenesProduccion
+    List<OrdenProduccion> ordenesProduccionNoDespachadas = widget
+        .ordenesProduccion
         .where((orden) => orden.estadoOrdenProduccion == Estado.NoDespachada)
         .toList();
     return Scaffold(
@@ -48,10 +66,11 @@ class OrdenesProduccionScreen extends StatelessWidget {
                 )
               : Container(
                   height: 500,
-                  child: ListView.builder(
-                    itemBuilder: (ctx, index) {
+                  child: ReorderableListView(
+                    children: ordenesProduccionNoDespachadas.map((orden) {
                       return Card(
                         elevation: 5,
+                        key: Key(orden.idOrdenProduccion),
                         margin: EdgeInsets.symmetric(
                           vertical: 8,
                           horizontal: 5,
@@ -59,25 +78,20 @@ class OrdenesProduccionScreen extends StatelessWidget {
                         child: ListTile(
                           onTap: () => Navigator.of(context).pushNamed(
                             Despacho.routeName,
-                            arguments: ordenesProduccionNoDespachadas[index],
+                            arguments: orden,
                           ),
-                          leading: CircleAvatar(
-                            radius: 30,
-                            child: Padding(
-                              padding: EdgeInsets.all(6),
-                              child: FittedBox(
-                                child: Text(
-                                    '\$${ordenesProduccionNoDespachadas[index].cantidadOrdenProduccion}'),
-                              ),
-                            ),
-                          ),
+                          leading: Container(
+                              width: 100,
+                              child: ChartBar(
+                                  orden.cantidadUnidades,
+                                  orden.cantidadUnidades /
+                                      orden.cantidadOrdenProduccion)),
                           title: Text(
-                            '${ordenesProduccionNoDespachadas[index].tipoProductoOrdenProduccion} - ${ordenesProduccionNoDespachadas[index].idOCOrdenProduccion}',
+                            '${orden.tipoProductoOrdenProduccion} - ${orden.cantidadUnidades} unidades terminadas',
                             style: Theme.of(context).textTheme.headline6,
                           ),
                           subtitle: Text(
-                            ordenesProduccionNoDespachadas[index]
-                                .clienteOrdenProduccion,
+                            orden.clienteOrdenProduccion,
                           ),
                           trailing: IconButton(
                             icon: Icon(Icons.delete),
@@ -86,8 +100,8 @@ class OrdenesProduccionScreen extends StatelessWidget {
                           ),
                         ),
                       );
-                    },
-                    itemCount: ordenesProduccionNoDespachadas.length,
+                    }).toList(),
+                    onReorder: reorderData,
                   ),
                 ),
           Row(
@@ -96,13 +110,7 @@ class OrdenesProduccionScreen extends StatelessWidget {
               RaisedButton(
                 child: Icon(Icons.add),
                 color: Theme.of(context).primaryColorDark,
-                onPressed: () => _startAddOC(context),
-              ),
-              RaisedButton(
-                child: Text('Producción'),
-                color: Theme.of(context).primaryColorDark,
-                onPressed: () => Navigator.of(context)
-                    .pushReplacementNamed(ProduccionScreen.routeName),
+                onPressed: () => widget._startAddOC(context),
               ),
             ],
           ),

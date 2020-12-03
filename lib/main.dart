@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:prototipo/models/enums.dart';
 import './screens/ordenes_produccion_screen.dart';
-import './screens/produccion_screen.dart';
+
 import './models/ordenCompra.dart';
 import './widgets/add_orden_compra.dart';
 
@@ -95,6 +95,12 @@ class _MyAppState extends State<MyApp> {
 
   void _startAddOC(BuildContext ctx) {
     showModalBottomSheet(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(25),
+          ),
+        ),
+        isScrollControlled: true,
         context: ctx,
         builder: (bCtx) {
           return
@@ -102,6 +108,15 @@ class _MyAppState extends State<MyApp> {
 
               NewOC(_addNewOC, listaClientes);
         });
+  }
+
+  void addCajas(
+      OrdenProduccion ordenProd, int cantidadCajas, int cantidadUnidades) {
+    setState(() {
+      ordenProd.cantidadCajas += cantidadCajas;
+      ordenProd.cantidadUnidades =
+          ordenProd.cantidadUnidades + cantidadCajas * cantidadUnidades;
+    });
   }
 
   @override
@@ -133,8 +148,7 @@ class _MyAppState extends State<MyApp> {
       initialRoute: '/',
       routes: {
         '/': (ctx) => OrdenesProduccionScreen(ordenesProduccion, _startAddOC),
-        Despacho.routeName: (ctx) => Despacho(),
-        ProduccionScreen.routeName: (ctx) => ProduccionScreen(),
+        Despacho.routeName: (ctx) => Despacho(addCajas),
       },
     );
   }

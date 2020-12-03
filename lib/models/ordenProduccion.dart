@@ -9,11 +9,15 @@ class OrdenProduccion {
   Estado estadoOrdenProduccion;
   final String tipoProductoOrdenProduccion;
   final String clienteOrdenProduccion;
+  int cantidadCajas;
+  int cantidadUnidades;
 
   final String idOCOrdenProduccion;
 
   OrdenProduccion({
     @required this.idOrdenProduccion,
+    this.cantidadCajas = 0,
+    this.cantidadUnidades = 0,
     @required this.cantidadOrdenProduccion,
     @required this.clienteOrdenProduccion,
     @required this.tipoProductoOrdenProduccion,
