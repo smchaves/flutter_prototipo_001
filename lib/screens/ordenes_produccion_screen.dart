@@ -10,8 +10,10 @@ import '../widgets/chartBar.dart';
 class OrdenesProduccionScreen extends StatefulWidget {
   final List<OrdenProduccion> ordenesProduccion;
   final Function _startAddOC;
+  final Function remove;
 
-  OrdenesProduccionScreen(this.ordenesProduccion, this._startAddOC);
+  OrdenesProduccionScreen(
+      this.ordenesProduccion, this._startAddOC, this.remove);
 
   @override
   _OrdenesProduccionScreenState createState() =>
@@ -35,6 +37,7 @@ class _OrdenesProduccionScreenState extends State<OrdenesProduccionScreen> {
         .ordenesProduccion
         .where((orden) => orden.estadoOrdenProduccion == Estado.NoDespachada)
         .toList();
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -45,12 +48,17 @@ class _OrdenesProduccionScreenState extends State<OrdenesProduccionScreen> {
       drawer: MainDrawer(),
       body: Column(
         children: [
-          ordenesProduccionNoDespachadas.isEmpty
+          widget.ordenesProduccion.isEmpty
               ? Column(
                   children: [
-                    Text(
-                      'No tienes órdenes de producción!',
-                      style: Theme.of(context).textTheme.headline6,
+                    Container(
+                      width: double.infinity,
+                      padding: EdgeInsets.all(20),
+                      child: Text(
+                        'No tienes órdenes de producción!',
+                        style: Theme.of(context).textTheme.headline6,
+                        textAlign: TextAlign.center,
+                      ),
                     ),
                     SizedBox(
                       height: 30,
@@ -98,7 +106,8 @@ class _OrdenesProduccionScreenState extends State<OrdenesProduccionScreen> {
                           trailing: IconButton(
                             icon: Icon(Icons.delete),
                             color: Theme.of(context).errorColor,
-                            onPressed: () => null,
+                            onPressed: () => widget.remove(
+                                ordenesProduccionNoDespachadas, orden),
                           ),
                         ),
                       );

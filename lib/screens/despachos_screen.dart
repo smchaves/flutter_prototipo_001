@@ -15,15 +15,22 @@ class DespachosScreen extends StatelessWidget {
       drawer: MainDrawer(),
       body: ListView.builder(
         itemBuilder: (ctx, index) {
-          return ListTile(
-            leading: Text(
-              despachos[index].cantidadDespacho.toString(),
-            ),
-            title: Text(despachos[index].destinoDespacho),
-            subtitle: Column(
-              children: [
-                Text(despachos[index].fechaDespacho),
-              ],
+          return Card(
+            elevation: 5,
+            child: ListTile(
+              leading: Text(
+                despachos[index].cantidadDespacho.toString(),
+              ),
+              title: Row(
+                children: [
+                  Text(despachos[index].nombreCliente),
+                  SizedBox(
+                    width: 30,
+                  ),
+                  Text(despachos[index].destinoDespacho),
+                ],
+              ),
+              subtitle: Text(despachos[index].fechaDespacho),
             ),
           );
         },

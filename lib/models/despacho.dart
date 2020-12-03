@@ -8,11 +8,13 @@ class Despacho {
   final String destinoDespacho;
   final String idOrdenProduccionDespacho;
   EstadoDespacho estadoDespacho;
+  final String nombreCliente;
 
   Despacho({
     @required this.cantidadDespacho,
     @required this.destinoDespacho,
     @required this.fechaDespacho,
     @required this.idOrdenProduccionDespacho,
+    @required this.nombreCliente,
   });
 }

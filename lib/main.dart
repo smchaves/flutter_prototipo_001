@@ -1,20 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:prototipo/screens/despachos_screen.dart';
+import './screens/despachos_screen.dart';
 import './models/enums.dart';
 import './screens/clientes_screen.dart';
 import './widgets/add_cliente.dart';
 import './screens/ordenes_produccion_screen.dart';
-
 import './models/ordenCompra.dart';
 import './widgets/add_orden_compra.dart';
 import './models/despacho.dart';
-
 import './models/clientes.dart';
 import './models/contrato.dart';
 import 'package:intl/intl.dart';
 import './models/ordenProduccion.dart';
 import './screens/detallesOP_screen.dart';
-import './screens/despachos_screen.dart';
 
 void main() {
   runApp(MyApp());
@@ -27,22 +24,21 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  List<OrdenProduccion> ordenesProduccion = [
-    OrdenProduccion(
-        idOrdenProduccion: 'OP21',
-        cantidadOrdenProduccion: 1000,
-        tipoProductoOrdenProduccion: 'pechera',
-        clienteOrdenProduccion: 'HTalca',
-        idOCOrdenProduccion: 'C1')
-  ];
+  List<OrdenProduccion> ordenesProduccion = [];
 
   var listaClientes = [
     Clientes(
-        direccionCliente: 'Norte', idCliente: 'C1', nombreCliente: 'HTalca'),
+        direccionCliente: 'Los Acacios 1997',
+        idCliente: 'C1',
+        nombreCliente: 'HTalca'),
     Clientes(
-        direccionCliente: 'Centro', idCliente: 'C2', nombreCliente: 'HDHHA'),
+        direccionCliente: 'Av. Alvarez 1802',
+        idCliente: 'C2',
+        nombreCliente: 'HDHHA'),
     Clientes(
-        direccionCliente: 'Sur', idCliente: 'C3', nombreCliente: 'HCurico'),
+        direccionCliente: 'Calle Uno 2345',
+        idCliente: 'C3',
+        nombreCliente: 'HCurico'),
   ];
 
   List<Despacho> despachosNoIngresados = [];
@@ -191,7 +187,8 @@ class _MyAppState extends State<MyApp> {
             cantidadDespacho: ordenProduccion.cantidadUnidades,
             destinoDespacho: clienteOrden.direccionCliente,
             fechaDespacho: DateFormat.yMd().format(DateTime.now()),
-            idOrdenProduccionDespacho: ordenProduccion.idOrdenProduccion);
+            idOrdenProduccionDespacho: ordenProduccion.idOrdenProduccion,
+            nombreCliente: clienteOrden.nombreCliente);
         nuevoDespacho.estadoDespacho = EstadoDespacho.NoIngresado;
         ordenProduccion.despachos.add(nuevoDespacho);
         despachosNoIngresados.add(nuevoDespacho);
@@ -216,7 +213,8 @@ class _MyAppState extends State<MyApp> {
             cantidadDespacho: ordenProduccion.cantidadUnidades,
             destinoDespacho: clienteOrden.direccionCliente,
             fechaDespacho: DateFormat.yMd().format(DateTime.now()),
-            idOrdenProduccionDespacho: ordenProduccion.idOrdenProduccion);
+            idOrdenProduccionDespacho: ordenProduccion.idOrdenProduccion,
+            nombreCliente: clienteOrden.nombreCliente);
         nuevoDespacho.estadoDespacho = EstadoDespacho.NoIngresado;
         ordenProduccion.despachos.add(nuevoDespacho);
         despachosNoIngresados.add(nuevoDespacho);
@@ -226,10 +224,23 @@ class _MyAppState extends State<MyApp> {
     return;
   }
 
+  void removeOrdenProduccion(List<OrdenProduccion> listaOrdenesProduccion,
+      OrdenProduccion ordenProduccion) {
+    int index = listaOrdenesProduccion.indexWhere(
+        (item) => item.idOrdenProduccion == ordenProduccion.idOrdenProduccion);
+    int index2 = listaClientes.indexWhere(
+        (item) => item.nombreCliente == ordenProduccion.clienteOrdenProduccion);
+    int index3 = listaClientes[index2].ordenesCompraDirectasCliente.indexWhere(
+        (item) => item.idOrdenCompra == ordenProduccion.idOCOrdenProduccion);
+    setState(() {
+      ordenesProduccion.removeAt(index);
+      listaClientes[index2].ordenesCompraDirectasCliente.removeAt(index3);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     actualizar(listaClientes, listaContratos);
-    ordenesProduccion[0].estadoOrdenProduccion = Estado.NoDespachada;
 
     return MaterialApp(
       title: 'Merida',
@@ -254,7 +265,8 @@ class _MyAppState extends State<MyApp> {
       ),
       initialRoute: '/',
       routes: {
-        '/': (ctx) => OrdenesProduccionScreen(ordenesProduccion, _startAddOC),
+        '/': (ctx) => OrdenesProduccionScreen(
+            ordenesProduccion, _startAddOC, removeOrdenProduccion),
         DetallesOrdenProduccionScreen.routeName: (ctx) =>
             DetallesOrdenProduccionScreen(addCajas, despachar),
         ClientesScreen.routeName: (ctx) =>
