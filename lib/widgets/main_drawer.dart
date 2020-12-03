@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:prototipo/screens/clientes_screen.dart';
 
 class MainDrawer extends StatelessWidget {
   Widget buildListTile(String title, IconData icon, Function tapHandler) {
@@ -52,7 +53,15 @@ class MainDrawer extends StatelessWidget {
             'Producción',
             Icons.settings,
             () {
-              Navigator.of(context).pushReplacementNamed('/produccion');
+              Navigator.of(context).pushReplacementNamed('/');
+            },
+          ),
+          buildListTile(
+            'Clientes',
+            Icons.accessibility,
+            () {
+              Navigator.of(context)
+                  .pushReplacementNamed(ClientesScreen.routeName);
             },
           ),
         ],

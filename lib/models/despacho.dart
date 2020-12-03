@@ -3,10 +3,11 @@ import 'enums.dart';
 
 class Despacho {
   TipoDespacho tipoDespacho;
-  final DateTime fechaDespacho;
+  final String fechaDespacho;
   final int cantidadDespacho;
   final String destinoDespacho;
   final String idOrdenProduccionDespacho;
+  EstadoDespacho estadoDespacho;
 
   Despacho({
     @required this.cantidadDespacho,

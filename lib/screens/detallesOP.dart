@@ -2,15 +2,16 @@ import 'package:flutter/material.dart';
 import '../models/ordenProduccion.dart';
 import '../widgets/main_drawer.dart';
 
-class Despacho extends StatefulWidget {
+class Despachos extends StatefulWidget {
   final Function addCajas;
+  final Function despachar;
   static const routeName = '/despachos';
-  Despacho(this.addCajas);
+  Despachos(this.addCajas, this.despachar);
   @override
   _DespachoState createState() => _DespachoState();
 }
 
-class _DespachoState extends State<Despacho> {
+class _DespachoState extends State<Despachos> {
   final _cantidadCajasController = TextEditingController();
   final _cantidadUnidadesController = TextEditingController();
   void _submitDataProd(OrdenProduccion orden) {
@@ -52,6 +53,11 @@ class _DespachoState extends State<Despacho> {
             },
           ),
         ],
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => widget.despachar(ordenSeleccionada),
+        child: Icon(Icons.send),
       ),
     );
   }

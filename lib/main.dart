@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:prototipo/models/enums.dart';
+import './models/enums.dart';
+import './screens/clientes_screen.dart';
+import './widgets/add_cliente.dart';
 import './screens/ordenes_produccion_screen.dart';
 
 import './models/ordenCompra.dart';
 import './widgets/add_orden_compra.dart';
+import './models/despacho.dart';
 
 import './models/clientes.dart';
 import './models/contrato.dart';
@@ -39,6 +42,8 @@ class _MyAppState extends State<MyApp> {
     Clientes(
         direccionCliente: 'Sur', idCliente: 'C3', nombreCliente: 'HCurico'),
   ];
+
+  List<Despacho> despachosNoIngresados;
 
   var listaContratos = [
     Contrato(
@@ -83,6 +88,7 @@ class _MyAppState extends State<MyApp> {
     );
     newOP.estadoOrdenProduccion = Estado.NoDespachada;
     newOC.ordenesProduccion.add(newOP);
+    newOC.estadoOrdenCompra = EstadoOrdenCompra.Activa;
 
     int index =
         listaClientes.indexWhere((cliente) => (cliente.idCliente == idCliente));
@@ -110,12 +116,81 @@ class _MyAppState extends State<MyApp> {
         });
   }
 
+  void _addNewClient(
+    String nombre,
+    String direccion,
+  ) {
+    var newClient = Clientes(
+      direccionCliente: direccion,
+      nombreCliente: nombre,
+      idCliente: DateTime.now().toString(),
+    );
+
+    setState(() {
+      listaClientes.add(newClient);
+    });
+  }
+
+  void _startAddClient(BuildContext ctx) {
+    showModalBottomSheet(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(25),
+          ),
+        ),
+        isScrollControlled: true,
+        context: ctx,
+        builder: (bCtx) {
+          return
+              //esto no es necesario actualmente
+
+              AddClient(_addNewClient);
+        });
+  }
+
   void addCajas(
       OrdenProduccion ordenProd, int cantidadCajas, int cantidadUnidades) {
     setState(() {
       ordenProd.cantidadCajas += cantidadCajas;
       ordenProd.cantidadUnidades =
           ordenProd.cantidadUnidades + cantidadCajas * cantidadUnidades;
+    });
+  }
+
+  void despachar(OrdenProduccion ordenProduccion) {
+    Clientes clienteOrden = listaClientes.firstWhere((cliente) =>
+        ordenProduccion.clienteOrdenProduccion == cliente.nombreCliente);
+
+    OrdenCompra ordenCompra = clienteOrden.ordenesCompraDirectasCliente
+        .firstWhere((ordenCom) =>
+            ordenCom.idOrdenCompra == ordenProduccion.idOCOrdenProduccion);
+    print(ordenCompra.tipoProductoOrdenCompra);
+    setState(() {
+      ordenProduccion.estadoOrdenProduccion = Estado.Despachada;
+      ordenCompra.estadoOrdenCompra = EstadoOrdenCompra.Completada;
+      var newOP = OrdenProduccion(
+        idOrdenProduccion: DateTime.now().toString(),
+        cantidadOrdenProduccion: ordenProduccion.cantidadOrdenProduccion -
+            ordenProduccion.cantidadUnidades,
+        tipoProductoOrdenProduccion:
+            ordenProduccion.tipoProductoOrdenProduccion,
+        clienteOrdenProduccion: ordenProduccion.clienteOrdenProduccion,
+        idOCOrdenProduccion: ordenProduccion.idOCOrdenProduccion,
+      );
+      newOP.estadoOrdenProduccion = Estado.NoDespachada;
+
+      ordenCompra.ordenesProduccion.add(newOP);
+      ordenesProduccion.add(newOP);
+      ordenesProduccion.remove(ordenProduccion);
+
+      var nuevoDespacho = Despacho(
+          cantidadDespacho: ordenProduccion.cantidadUnidades,
+          destinoDespacho: clienteOrden.direccionCliente,
+          fechaDespacho: DateFormat.yMd().format(DateTime.now()),
+          idOrdenProduccionDespacho: ordenProduccion.idOrdenProduccion);
+      nuevoDespacho.estadoDespacho = EstadoDespacho.NoIngresado;
+      ordenProduccion.despachos.add(nuevoDespacho);
+      despachosNoIngresados.add(nuevoDespacho);
     });
   }
 
@@ -148,7 +223,9 @@ class _MyAppState extends State<MyApp> {
       initialRoute: '/',
       routes: {
         '/': (ctx) => OrdenesProduccionScreen(ordenesProduccion, _startAddOC),
-        Despacho.routeName: (ctx) => Despacho(addCajas),
+        Despachos.routeName: (ctx) => Despachos(addCajas, despachar),
+        ClientesScreen.routeName: (ctx) =>
+            ClientesScreen(listaClientes, _startAddClient),
       },
     );
   }

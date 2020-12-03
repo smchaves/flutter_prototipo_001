@@ -7,3 +7,13 @@ enum TipoDespacho {
   Starken,
   Awto,
 }
+
+enum EstadoOrdenCompra {
+  Activa,
+  Completada,
+}
+
+enum EstadoDespacho {
+  Ingresado,
+  NoIngresado,
+}

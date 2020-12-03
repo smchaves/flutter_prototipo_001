@@ -77,7 +77,7 @@ class _OrdenesProduccionScreenState extends State<OrdenesProduccionScreen> {
                         ),
                         child: ListTile(
                           onTap: () => Navigator.of(context).pushNamed(
-                            Despacho.routeName,
+                            Despachos.routeName,
                             arguments: orden,
                           ),
                           leading: Container(
@@ -85,13 +85,15 @@ class _OrdenesProduccionScreenState extends State<OrdenesProduccionScreen> {
                               child: ChartBar(
                                   orden.cantidadUnidades,
                                   orden.cantidadUnidades /
-                                      orden.cantidadOrdenProduccion)),
+                                      orden.cantidadOrdenProduccion,
+                                  orden.cantidadOrdenProduccion)),
                           title: Text(
-                            '${orden.tipoProductoOrdenProduccion} - ${orden.cantidadUnidades} unidades terminadas',
+                            '${orden.tipoProductoOrdenProduccion}',
                             style: Theme.of(context).textTheme.headline6,
                           ),
                           subtitle: Text(
                             orden.clienteOrdenProduccion,
+                            style: TextStyle(fontSize: 18),
                           ),
                           trailing: IconButton(
                             icon: Icon(Icons.delete),
@@ -104,17 +106,12 @@ class _OrdenesProduccionScreenState extends State<OrdenesProduccionScreen> {
                     onReorder: reorderData,
                   ),
                 ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              RaisedButton(
-                child: Icon(Icons.add),
-                color: Theme.of(context).primaryColorDark,
-                onPressed: () => widget._startAddOC(context),
-              ),
-            ],
-          ),
         ],
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => widget._startAddOC(context),
+        child: Icon(Icons.add),
       ),
     );
   }
