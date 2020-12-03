@@ -2,18 +2,18 @@ import 'ordenCompra.dart';
 import 'package:flutter/material.dart';
 
 class Contrato {
-  final String id;
-  final String fecha;
-  final int cantidadEstimada;
-  final int duracion;
-  final String idCliente;
+  final String idContrato;
+  final String fechaInicioContrato;
+  final int cantidadEstimadaContrato;
+  final int duracionContrato;
+  final String idClienteContrato;
   List<OrdenCompra> ordenesCompraContrato = [];
 
   Contrato({
-    @required this.cantidadEstimada,
-    @required this.duracion,
-    @required this.fecha,
-    @required this.id,
-    @required this.idCliente,
+    @required this.cantidadEstimadaContrato,
+    @required this.duracionContrato,
+    @required this.fechaInicioContrato,
+    @required this.idContrato,
+    @required this.idClienteContrato,
   });
 }

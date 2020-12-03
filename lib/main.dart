@@ -24,37 +24,40 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   List<OrdenProduccion> ordenesProduccion = [
     OrdenProduccion(
-        id: 'OP21',
-        cantidad: 1000,
-        cliente: 'C1',
-        tipoProducto: 'pechera',
-        idOC: '14')
+        idOrdenProduccion: 'OP21',
+        cantidadOrdenProduccion: 1000,
+        tipoProductoOrdenProduccion: 'pechera',
+        clienteOrdenProduccion: 'HTalca',
+        idOCOrdenProduccion: 'C1')
   ];
 
   var listaClientes = [
-    Clientes(direccion: 'Norte', id: 'C1', nombre: 'HTalca'),
-    Clientes(direccion: 'Centro', id: 'C2', nombre: 'HDHHA'),
-    Clientes(direccion: 'Centro', id: 'C3', nombre: 'HCurico'),
+    Clientes(
+        direccionCliente: 'Norte', idCliente: 'C1', nombreCliente: 'HTalca'),
+    Clientes(
+        direccionCliente: 'Centro', idCliente: 'C2', nombreCliente: 'HDHHA'),
+    Clientes(
+        direccionCliente: 'Sur', idCliente: 'C3', nombreCliente: 'HCurico'),
   ];
 
   var listaContratos = [
     Contrato(
-        cantidadEstimada: 10000,
-        duracion: 24,
-        fecha: DateFormat.yMMMd().format(DateTime.now()),
-        id: 'C1Co1',
-        idCliente: 'C1'),
+        cantidadEstimadaContrato: 10000,
+        duracionContrato: 24,
+        fechaInicioContrato: DateFormat.yMMMd().format(DateTime.now()),
+        idContrato: 'C1Co1',
+        idClienteContrato: 'C1'),
     Contrato(
-        cantidadEstimada: 5000,
-        duracion: 12,
-        fecha: DateFormat.yMMMd().format(DateTime.now()),
-        id: 'C2C01',
-        idCliente: 'C2'),
+        cantidadEstimadaContrato: 5000,
+        duracionContrato: 12,
+        fechaInicioContrato: DateFormat.yMMMd().format(DateTime.now()),
+        idContrato: 'C2C01',
+        idClienteContrato: 'C2'),
   ];
 
   void actualizar(List<Clientes> l1, List<Contrato> l2) {
-    l1[0].contratos.add(l2[0]);
-    l1[1].contratos.add(l2[1]);
+    l1[0].contratosCliente.add(l2[0]);
+    l1[1].contratosCliente.add(l2[1]);
   }
 
   void _addNewOC(
@@ -62,28 +65,29 @@ class _MyAppState extends State<MyApp> {
     String folio,
     String idCliente,
     String tipoProducto,
+    String nombreCliente,
   ) {
     var newOC = OrdenCompra(
-      cantidad: cantidad,
-      folio: folio,
-      idOC: DateTime.now().toString(),
-      idCliente: idCliente,
-      tipoProducto: tipoProducto,
+      cantidadOrdenCompra: cantidad,
+      folioOrdenCompra: folio,
+      idOrdenCompra: DateTime.now().toString(),
+      idClienteOrdenCompra: idCliente,
+      tipoProductoOrdenCompra: tipoProducto,
     );
     var newOP = OrdenProduccion(
-      id: DateTime.now().toString(),
-      cantidad: cantidad,
-      cliente: idCliente,
-      tipoProducto: tipoProducto,
-      idOC: newOC.idOC,
+      idOrdenProduccion: DateTime.now().toString(),
+      cantidadOrdenProduccion: cantidad,
+      tipoProductoOrdenProduccion: tipoProducto,
+      clienteOrdenProduccion: nombreCliente,
+      idOCOrdenProduccion: newOC.idOrdenCompra,
     );
-    newOP.estado = Estado.NoDespachada;
+    newOP.estadoOrdenProduccion = Estado.NoDespachada;
     newOC.ordenesProduccion.add(newOP);
 
     int index =
-        listaClientes.indexWhere((cliente) => (cliente.id == idCliente));
+        listaClientes.indexWhere((cliente) => (cliente.idCliente == idCliente));
 
-    listaClientes[index].ordenesCompraDirectas.add(newOC);
+    listaClientes[index].ordenesCompraDirectasCliente.add(newOC);
     setState(() {
       ordenesProduccion.add(newOP);
     });
@@ -91,21 +95,19 @@ class _MyAppState extends State<MyApp> {
 
   void _startAddOC(BuildContext ctx) {
     showModalBottomSheet(
-      context: ctx,
-      builder: (bCtx) {
-        return Container(
-          //esto no es necesario actualmente
+        context: ctx,
+        builder: (bCtx) {
+          return
+              //esto no es necesario actualmente
 
-          child: NewOC(_addNewOC, listaClientes),
-        );
-      },
-    );
+              NewOC(_addNewOC, listaClientes);
+        });
   }
 
   @override
   Widget build(BuildContext context) {
     actualizar(listaClientes, listaContratos);
-    ordenesProduccion[0].estado = Estado.NoDespachada;
+    ordenesProduccion[0].estadoOrdenProduccion = Estado.NoDespachada;
 
     return MaterialApp(
       title: 'Merida',

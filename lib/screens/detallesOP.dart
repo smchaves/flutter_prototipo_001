@@ -10,11 +10,12 @@ class Despacho extends StatelessWidget {
         ModalRoute.of(context).settings.arguments as OrdenProduccion;
     return Scaffold(
       appBar: AppBar(
-        title: Text('OP Id: ${orden.id}'),
+        title: Text('OP Id: ${orden.idOrdenProduccion}'),
       ),
       drawer: MainDrawer(),
       body: Center(
-        child: Text('Aqui se despacha, el producto es ${orden.tipoProducto}'),
+        child: Text(
+            'Aqui se despacha, el producto es ${orden.tipoProductoOrdenProduccion}'),
       ),
     );
   }

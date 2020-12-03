@@ -44,12 +44,8 @@ class _NewOCState extends State<NewOC> {
       return;
     }
 
-    widget.addOC(
-      enteredCantidad,
-      enteredFolio,
-      enteredIdCliente,
-      enteredTipoProducto,
-    );
+    widget.addOC(enteredCantidad, enteredFolio, enteredIdCliente,
+        enteredTipoProducto, getDropDownItem());
 
     Navigator.of(context).pop();
   }
@@ -60,8 +56,8 @@ class _NewOCState extends State<NewOC> {
       id = 'Ingrese cliente';
     } else {
       int index = widget.listaClientes
-          .indexWhere((cliente) => (cliente.nombre == nombre));
-      id = widget.listaClientes[index].id;
+          .indexWhere((cliente) => (cliente.nombreCliente == nombre));
+      id = widget.listaClientes[index].idCliente;
     }
 
     return id;
@@ -69,66 +65,77 @@ class _NewOCState extends State<NewOC> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          //FindClient(widget.listaClientes),
-          Container(
-            width: 200,
-            child: DropdownButton(
-              hint: Text(_vista),
-              onChanged: (_value) {
-                setState(() {
-                  _vista = _value;
-                });
-              },
-              items: widget.listaClientes.map((cliente) {
-                return DropdownMenuItem(
-                  value: cliente.nombre,
-                  child: Text(cliente.nombre),
-                );
-              }).toList(),
-            ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+    return SingleChildScrollView(
+      child: Card(
+        child: Container(
+          padding: EdgeInsets.only(
+              top: 10,
+              left: 10,
+              right: 10,
+              bottom: MediaQuery.of(context).viewInsets.bottom + 10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('ID Cliente:'),
-              Text(findClientId(getDropDownItem())),
+              //FindClient(widget.listaClientes),
+              Container(
+                width: 200,
+                child: DropdownButton(
+                  hint: Text(_vista),
+                  onChanged: (_value) {
+                    setState(() {
+                      _vista = _value;
+                    });
+                  },
+                  items: widget.listaClientes.map((cliente) {
+                    return DropdownMenuItem(
+                      value: cliente.nombreCliente,
+                      child: Text(cliente.nombreCliente),
+                    );
+                  }).toList(),
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Text('ID Cliente:'),
+                  Text(findClientId(getDropDownItem())),
+                ],
+              ),
+              TextField(
+                keyboardType: TextInputType.number,
+                controller: _cantidadController,
+                decoration: InputDecoration(
+                  labelText: 'Cantidad',
+                ),
+                onSubmitted: (_) =>
+                    _submitData(findClientId(getDropDownItem())),
+              ),
+              TextField(
+                controller: _tipoProductoController,
+                decoration: InputDecoration(
+                  labelText: 'Tipo Producto',
+                ),
+                onSubmitted: (_) =>
+                    _submitData(findClientId(getDropDownItem())),
+              ),
+              TextField(
+                keyboardType: TextInputType.number,
+                controller: _folioController,
+                decoration: InputDecoration(
+                  labelText: 'Folio',
+                ),
+                onSubmitted: (_) =>
+                    _submitData(findClientId(getDropDownItem())),
+              ),
+              RaisedButton(
+                onPressed: () => _submitData(findClientId(getDropDownItem())),
+                child: Text('Add OC'),
+                color: Theme.of(context).primaryColor,
+                textColor: Theme.of(context).textTheme.button.color,
+              )
             ],
           ),
-          TextField(
-            keyboardType: TextInputType.number,
-            controller: _cantidadController,
-            decoration: InputDecoration(
-              labelText: 'Cantidad',
-            ),
-            onSubmitted: (_) => _submitData(findClientId(getDropDownItem())),
-          ),
-          TextField(
-            controller: _tipoProductoController,
-            decoration: InputDecoration(
-              labelText: 'Tipo Producto',
-            ),
-            onSubmitted: (_) => _submitData(findClientId(getDropDownItem())),
-          ),
-          TextField(
-            keyboardType: TextInputType.number,
-            controller: _folioController,
-            decoration: InputDecoration(
-              labelText: 'Folio',
-            ),
-            onSubmitted: (_) => _submitData(findClientId(getDropDownItem())),
-          ),
-          RaisedButton(
-            onPressed: () => _submitData(findClientId(getDropDownItem())),
-            child: Text('Add OC'),
-            color: Theme.of(context).primaryColor,
-            textColor: Theme.of(context).textTheme.button.color,
-          )
-        ],
+        ),
       ),
     );
   }

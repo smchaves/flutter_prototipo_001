@@ -15,7 +15,7 @@ class OrdenesProduccionScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<OrdenProduccion> ordenesProduccionNoDespachadas = ordenesProduccion
-        .where((orden) => orden.estado == Estado.NoDespachada)
+        .where((orden) => orden.estadoOrdenProduccion == Estado.NoDespachada)
         .toList();
     return Scaffold(
       appBar: AppBar(
@@ -67,16 +67,17 @@ class OrdenesProduccionScreen extends StatelessWidget {
                               padding: EdgeInsets.all(6),
                               child: FittedBox(
                                 child: Text(
-                                    '\$${ordenesProduccionNoDespachadas[index].cantidad}'),
+                                    '\$${ordenesProduccionNoDespachadas[index].cantidadOrdenProduccion}'),
                               ),
                             ),
                           ),
                           title: Text(
-                            '${ordenesProduccionNoDespachadas[index].tipoProducto} - ${ordenesProduccionNoDespachadas[index].idOC}',
+                            '${ordenesProduccionNoDespachadas[index].tipoProductoOrdenProduccion} - ${ordenesProduccionNoDespachadas[index].idOCOrdenProduccion}',
                             style: Theme.of(context).textTheme.headline6,
                           ),
                           subtitle: Text(
-                            ordenesProduccionNoDespachadas[index].cliente,
+                            ordenesProduccionNoDespachadas[index]
+                                .clienteOrdenProduccion,
                           ),
                           trailing: IconButton(
                             icon: Icon(Icons.delete),

@@ -3,15 +3,15 @@ import 'ordenCompra.dart';
 import 'package:flutter/material.dart';
 
 class Clientes {
-  final String nombre;
-  final String direccion;
-  final String id;
-  List<Contrato> contratos = [];
-  List<OrdenCompra> ordenesCompraDirectas = [];
+  final String nombreCliente;
+  final String direccionCliente;
+  final String idCliente;
+  List<Contrato> contratosCliente = [];
+  List<OrdenCompra> ordenesCompraDirectasCliente = [];
 
   Clientes({
-    @required this.nombre,
-    @required this.direccion,
-    @required this.id,
+    @required this.nombreCliente,
+    @required this.direccionCliente,
+    @required this.idCliente,
   });
 }
