@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:prototipo/screens/clientes_screen.dart';
+import 'package:prototipo/screens/despachos_screen.dart';
 
 class MainDrawer extends StatelessWidget {
   Widget buildListTile(String title, IconData icon, Function tapHandler) {
@@ -50,10 +51,11 @@ class MainDrawer extends StatelessWidget {
             },
           ),
           buildListTile(
-            'Producción',
+            'Despachos activos',
             Icons.settings,
             () {
-              Navigator.of(context).pushReplacementNamed('/');
+              Navigator.of(context)
+                  .pushReplacementNamed(DespachosScreen.routeName);
             },
           ),
           buildListTile(

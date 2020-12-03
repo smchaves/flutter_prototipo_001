@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../models/ordenProduccion.dart';
 import '../models/enums.dart';
-import './detallesOP.dart';
+import 'detallesOP_screen.dart';
 import '../widgets/main_drawer.dart';
 import '../widgets/chartBar.dart';
 //import 'package:intl/intl.dart';
@@ -77,7 +77,7 @@ class _OrdenesProduccionScreenState extends State<OrdenesProduccionScreen> {
                         ),
                         child: ListTile(
                           onTap: () => Navigator.of(context).pushNamed(
-                            Despachos.routeName,
+                            DetallesOrdenProduccionScreen.routeName,
                             arguments: orden,
                           ),
                           leading: Container(

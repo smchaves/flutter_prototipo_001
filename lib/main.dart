@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:prototipo/screens/despachos_screen.dart';
 import './models/enums.dart';
 import './screens/clientes_screen.dart';
 import './widgets/add_cliente.dart';
@@ -12,7 +13,8 @@ import './models/clientes.dart';
 import './models/contrato.dart';
 import 'package:intl/intl.dart';
 import './models/ordenProduccion.dart';
-import './screens/detallesOP.dart';
+import './screens/detallesOP_screen.dart';
+import './screens/despachos_screen.dart';
 
 void main() {
   runApp(MyApp());
@@ -43,7 +45,7 @@ class _MyAppState extends State<MyApp> {
         direccionCliente: 'Sur', idCliente: 'C3', nombreCliente: 'HCurico'),
   ];
 
-  List<Despacho> despachosNoIngresados;
+  List<Despacho> despachosNoIngresados = [];
 
   var listaContratos = [
     Contrato(
@@ -158,40 +160,70 @@ class _MyAppState extends State<MyApp> {
   }
 
   void despachar(OrdenProduccion ordenProduccion) {
-    Clientes clienteOrden = listaClientes.firstWhere((cliente) =>
-        ordenProduccion.clienteOrdenProduccion == cliente.nombreCliente);
+    if (ordenProduccion.cantidadOrdenProduccion !=
+        ordenProduccion.cantidadUnidades) {
+      Clientes clienteOrden = listaClientes.firstWhere((cliente) =>
+          ordenProduccion.clienteOrdenProduccion == cliente.nombreCliente);
 
-    OrdenCompra ordenCompra = clienteOrden.ordenesCompraDirectasCliente
-        .firstWhere((ordenCom) =>
-            ordenCom.idOrdenCompra == ordenProduccion.idOCOrdenProduccion);
-    print(ordenCompra.tipoProductoOrdenCompra);
-    setState(() {
-      ordenProduccion.estadoOrdenProduccion = Estado.Despachada;
-      ordenCompra.estadoOrdenCompra = EstadoOrdenCompra.Completada;
-      var newOP = OrdenProduccion(
-        idOrdenProduccion: DateTime.now().toString(),
-        cantidadOrdenProduccion: ordenProduccion.cantidadOrdenProduccion -
-            ordenProduccion.cantidadUnidades,
-        tipoProductoOrdenProduccion:
-            ordenProduccion.tipoProductoOrdenProduccion,
-        clienteOrdenProduccion: ordenProduccion.clienteOrdenProduccion,
-        idOCOrdenProduccion: ordenProduccion.idOCOrdenProduccion,
-      );
-      newOP.estadoOrdenProduccion = Estado.NoDespachada;
+      OrdenCompra ordenCompra = clienteOrden.ordenesCompraDirectasCliente
+          .firstWhere((ordenCom) =>
+              ordenCom.idOrdenCompra == ordenProduccion.idOCOrdenProduccion);
+      print(ordenCompra.tipoProductoOrdenCompra);
+      setState(() {
+        ordenProduccion.estadoOrdenProduccion = Estado.Despachada;
 
-      ordenCompra.ordenesProduccion.add(newOP);
-      ordenesProduccion.add(newOP);
-      ordenesProduccion.remove(ordenProduccion);
+        var newOP = OrdenProduccion(
+          idOrdenProduccion: DateTime.now().toString(),
+          cantidadOrdenProduccion: ordenProduccion.cantidadOrdenProduccion -
+              ordenProduccion.cantidadUnidades,
+          tipoProductoOrdenProduccion:
+              ordenProduccion.tipoProductoOrdenProduccion,
+          clienteOrdenProduccion: ordenProduccion.clienteOrdenProduccion,
+          idOCOrdenProduccion: ordenProduccion.idOCOrdenProduccion,
+        );
+        newOP.estadoOrdenProduccion = Estado.NoDespachada;
 
-      var nuevoDespacho = Despacho(
-          cantidadDespacho: ordenProduccion.cantidadUnidades,
-          destinoDespacho: clienteOrden.direccionCliente,
-          fechaDespacho: DateFormat.yMd().format(DateTime.now()),
-          idOrdenProduccionDespacho: ordenProduccion.idOrdenProduccion);
-      nuevoDespacho.estadoDespacho = EstadoDespacho.NoIngresado;
-      ordenProduccion.despachos.add(nuevoDespacho);
-      despachosNoIngresados.add(nuevoDespacho);
-    });
+        ordenCompra.ordenesProduccion.add(newOP);
+        ordenesProduccion.add(newOP);
+        ordenesProduccion.remove(ordenProduccion);
+
+        var nuevoDespacho = Despacho(
+            cantidadDespacho: ordenProduccion.cantidadUnidades,
+            destinoDespacho: clienteOrden.direccionCliente,
+            fechaDespacho: DateFormat.yMd().format(DateTime.now()),
+            idOrdenProduccionDespacho: ordenProduccion.idOrdenProduccion);
+        nuevoDespacho.estadoDespacho = EstadoDespacho.NoIngresado;
+        ordenProduccion.despachos.add(nuevoDespacho);
+        despachosNoIngresados.add(nuevoDespacho);
+      });
+      return;
+    } else if (ordenProduccion.cantidadOrdenProduccion ==
+        ordenProduccion.cantidadUnidades) {
+      Clientes clienteOrden = listaClientes.firstWhere((cliente) =>
+          ordenProduccion.clienteOrdenProduccion == cliente.nombreCliente);
+
+      OrdenCompra ordenCompra = clienteOrden.ordenesCompraDirectasCliente
+          .firstWhere((ordenCom) =>
+              ordenCom.idOrdenCompra == ordenProduccion.idOCOrdenProduccion);
+      print(ordenCompra.tipoProductoOrdenCompra);
+      setState(() {
+        ordenProduccion.estadoOrdenProduccion = Estado.Despachada;
+        ordenCompra.estadoOrdenCompra = EstadoOrdenCompra.Completada;
+
+        ordenesProduccion.remove(ordenProduccion);
+
+        var nuevoDespacho = Despacho(
+            cantidadDespacho: ordenProduccion.cantidadUnidades,
+            destinoDespacho: clienteOrden.direccionCliente,
+            fechaDespacho: DateFormat.yMd().format(DateTime.now()),
+            idOrdenProduccionDespacho: ordenProduccion.idOrdenProduccion);
+        nuevoDespacho.estadoDespacho = EstadoDespacho.NoIngresado;
+        ordenProduccion.despachos.add(nuevoDespacho);
+        despachosNoIngresados.add(nuevoDespacho);
+      });
+      return;
+    }
+    return;
   }
 
   @override
@@ -223,9 +255,12 @@ class _MyAppState extends State<MyApp> {
       initialRoute: '/',
       routes: {
         '/': (ctx) => OrdenesProduccionScreen(ordenesProduccion, _startAddOC),
-        Despachos.routeName: (ctx) => Despachos(addCajas, despachar),
+        DetallesOrdenProduccionScreen.routeName: (ctx) =>
+            DetallesOrdenProduccionScreen(addCajas, despachar),
         ClientesScreen.routeName: (ctx) =>
             ClientesScreen(listaClientes, _startAddClient),
+        DespachosScreen.routeName: (ctx) =>
+            DespachosScreen(despachosNoIngresados),
       },
     );
   }
