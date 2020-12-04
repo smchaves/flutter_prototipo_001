@@ -6,7 +6,7 @@ class Despacho {
   final String fechaDespacho;
   final int cantidadDespacho;
   final String destinoDespacho;
-  final String idOrdenProduccionDespacho;
+  final String idOrdenProduccion;
   EstadoDespacho estadoDespacho;
   final String nombreCliente;
 
@@ -14,7 +14,7 @@ class Despacho {
     @required this.cantidadDespacho,
     @required this.destinoDespacho,
     @required this.fechaDespacho,
-    @required this.idOrdenProduccionDespacho,
+    @required this.idOrdenProduccion,
     @required this.nombreCliente,
   });
 }

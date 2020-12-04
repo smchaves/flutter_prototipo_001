@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../models/ordenProduccion.dart';
 import '../widgets/main_drawer.dart';
+//import 'package:firebase_core/firebase_core.dart';
 
 class DetallesOrdenProduccionScreen extends StatefulWidget {
   final Function addCajas;
@@ -60,7 +62,12 @@ class _DetallesOrdenProduccionScreenState
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           widget.despachar(ordenSeleccionada);
-
+          FirebaseFirestore.instance
+              .collection('Cliente')
+              .snapshots()
+              .listen((data) {
+            print(data.docs[0].id);
+          });
           Navigator.of(context).pop();
         },
         child: Icon(Icons.send),

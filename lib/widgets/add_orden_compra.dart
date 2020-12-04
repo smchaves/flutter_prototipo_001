@@ -56,8 +56,8 @@ class _NewOCState extends State<NewOC> {
       id = 'Ingrese cliente';
     } else {
       int index = widget.listaClientes
-          .indexWhere((cliente) => (cliente.nombreCliente == nombre));
-      id = widget.listaClientes[index].idCliente;
+          .indexWhere((cliente) => (cliente.nombre == nombre));
+      id = widget.listaClientes[index].id;
     }
 
     return id;
@@ -84,8 +84,8 @@ class _NewOCState extends State<NewOC> {
                 },
                 items: widget.listaClientes.map((cliente) {
                   return DropdownMenuItem(
-                    value: cliente.nombreCliente,
-                    child: Text(cliente.nombreCliente),
+                    value: cliente.nombre,
+                    child: Text(cliente.nombre),
                   );
                 }).toList(),
               ),

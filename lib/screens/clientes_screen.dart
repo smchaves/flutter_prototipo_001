@@ -25,10 +25,9 @@ class _ClientesScreenState extends State<ClientesScreen> {
           return Card(
             elevation: 5,
             child: ListTile(
-              leading: Text(cliente.nombreCliente),
-              title: Text(cliente.direccionCliente),
-              subtitle: Text(
-                  'Cantidad de OC: ${cliente.ordenesCompraDirectasCliente.length}'),
+              leading: Text(cliente.nombre),
+              title: Text(cliente.direccion),
+              subtitle: Text('Cantidad de OC: ${cliente.ordenesCompra.length}'),
             ),
           );
         }).toList(),

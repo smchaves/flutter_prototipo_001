@@ -28,18 +28,9 @@ class _MyAppState extends State<MyApp> {
   List<OrdenProduccion> ordenesProduccion = [];
 
   var listaClientes = [
-    Clientes(
-        direccionCliente: 'Los Acacios 1997',
-        idCliente: 'C1',
-        nombreCliente: 'HTalca'),
-    Clientes(
-        direccionCliente: 'Av. Alvarez 1802',
-        idCliente: 'C2',
-        nombreCliente: 'HDHHA'),
-    Clientes(
-        direccionCliente: 'Calle Uno 2345',
-        idCliente: 'C3',
-        nombreCliente: 'HCurico'),
+    Clientes(direccion: 'Los Acacios 1997', id: 'C1', nombre: 'HTalca'),
+    Clientes(direccion: 'Av. Alvarez 1802', id: 'C2', nombre: 'HDHHA'),
+    Clientes(direccion: 'Calle Uno 2345', id: 'C3', nombre: 'HCurico'),
   ];
 
   List<Despacho> despachosNoIngresados = [];
@@ -60,8 +51,8 @@ class _MyAppState extends State<MyApp> {
   ];
 
   void actualizar(List<Clientes> l1, List<Contrato> l2) {
-    l1[0].contratosCliente.add(l2[0]);
-    l1[1].contratosCliente.add(l2[1]);
+    l1[0].contratos.add(l2[0]);
+    l1[1].contratos.add(l2[1]);
   }
 
   void _addNewOC(
@@ -90,9 +81,9 @@ class _MyAppState extends State<MyApp> {
     newOC.estado = EstadoOrdenCompra.Activa;
 
     int index =
-        listaClientes.indexWhere((cliente) => (cliente.idCliente == idCliente));
+        listaClientes.indexWhere((cliente) => (cliente.id == idCliente));
 
-    listaClientes[index].ordenesCompraDirectasCliente.add(newOC);
+    listaClientes[index].ordenesCompra.add(newOC);
     setState(() {
       ordenesProduccion.add(newOP);
     });
@@ -120,9 +111,9 @@ class _MyAppState extends State<MyApp> {
     String direccion,
   ) {
     var newClient = Clientes(
-      direccionCliente: direccion,
-      nombreCliente: nombre,
-      idCliente: DateTime.now().toString(),
+      direccion: direccion,
+      nombre: nombre,
+      id: DateTime.now().toString(),
     );
 
     setState(() {
@@ -158,10 +149,10 @@ class _MyAppState extends State<MyApp> {
 
   void despachar(OrdenProduccion ordenProduccion) {
     if (ordenProduccion.cantidad != ordenProduccion.cantidadUnidades) {
-      Clientes clienteOrden = listaClientes.firstWhere(
-          (cliente) => ordenProduccion.cliente == cliente.nombreCliente);
+      Clientes clienteOrden = listaClientes
+          .firstWhere((cliente) => ordenProduccion.cliente == cliente.nombre);
 
-      OrdenCompra ordenCompra = clienteOrden.ordenesCompraDirectasCliente
+      OrdenCompra ordenCompra = clienteOrden.ordenesCompra
           .firstWhere((ordenCom) => ordenCom.id == ordenProduccion.idOC);
       print(ordenCompra.tipoProducto);
       setState(() {
@@ -182,20 +173,20 @@ class _MyAppState extends State<MyApp> {
 
         var nuevoDespacho = Despacho(
             cantidadDespacho: ordenProduccion.cantidadUnidades,
-            destinoDespacho: clienteOrden.direccionCliente,
+            destinoDespacho: clienteOrden.direccion,
             fechaDespacho: DateFormat.yMd().format(DateTime.now()),
-            idOrdenProduccionDespacho: ordenProduccion.id,
-            nombreCliente: clienteOrden.nombreCliente);
+            idOrdenProduccion: ordenProduccion.id,
+            nombreCliente: clienteOrden.nombre);
         nuevoDespacho.estadoDespacho = EstadoDespacho.NoIngresado;
         ordenProduccion.despachos.add(nuevoDespacho);
         despachosNoIngresados.add(nuevoDespacho);
       });
       return;
     } else if (ordenProduccion.cantidad == ordenProduccion.cantidadUnidades) {
-      Clientes clienteOrden = listaClientes.firstWhere(
-          (cliente) => ordenProduccion.cliente == cliente.nombreCliente);
+      Clientes clienteOrden = listaClientes
+          .firstWhere((cliente) => ordenProduccion.cliente == cliente.nombre);
 
-      OrdenCompra ordenCompra = clienteOrden.ordenesCompraDirectasCliente
+      OrdenCompra ordenCompra = clienteOrden.ordenesCompra
           .firstWhere((ordenCom) => ordenCom.id == ordenProduccion.idOC);
       print(ordenCompra.tipoProducto);
       setState(() {
@@ -206,10 +197,10 @@ class _MyAppState extends State<MyApp> {
 
         var nuevoDespacho = Despacho(
             cantidadDespacho: ordenProduccion.cantidadUnidades,
-            destinoDespacho: clienteOrden.direccionCliente,
+            destinoDespacho: clienteOrden.direccion,
             fechaDespacho: DateFormat.yMd().format(DateTime.now()),
-            idOrdenProduccionDespacho: ordenProduccion.id,
-            nombreCliente: clienteOrden.nombreCliente);
+            idOrdenProduccion: ordenProduccion.id,
+            nombreCliente: clienteOrden.nombre);
         nuevoDespacho.estadoDespacho = EstadoDespacho.NoIngresado;
         ordenProduccion.despachos.add(nuevoDespacho);
         despachosNoIngresados.add(nuevoDespacho);
@@ -224,13 +215,13 @@ class _MyAppState extends State<MyApp> {
     int index = listaOrdenesProduccion
         .indexWhere((item) => item.id == ordenProduccion.id);
     int index2 = listaClientes
-        .indexWhere((item) => item.nombreCliente == ordenProduccion.cliente);
+        .indexWhere((item) => item.nombre == ordenProduccion.cliente);
     int index3 = listaClientes[index2]
-        .ordenesCompraDirectasCliente
+        .ordenesCompra
         .indexWhere((item) => item.id == ordenProduccion.idOC);
     setState(() {
       ordenesProduccion.removeAt(index);
-      listaClientes[index2].ordenesCompraDirectasCliente.removeAt(index3);
+      listaClientes[index2].ordenesCompra.removeAt(index3);
     });
   }
 
