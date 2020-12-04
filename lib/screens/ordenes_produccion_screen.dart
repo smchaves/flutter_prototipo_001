@@ -35,7 +35,7 @@ class _OrdenesProduccionScreenState extends State<OrdenesProduccionScreen> {
   Widget build(BuildContext context) {
     List<OrdenProduccion> ordenesProduccionNoDespachadas = widget
         .ordenesProduccion
-        .where((orden) => orden.estadoOrdenProduccion == Estado.NoDespachada)
+        .where((orden) => orden.estado == Estado.NoDespachada)
         .toList();
 
     return Scaffold(
@@ -78,7 +78,7 @@ class _OrdenesProduccionScreenState extends State<OrdenesProduccionScreen> {
                     children: ordenesProduccionNoDespachadas.map((orden) {
                       return Card(
                         elevation: 5,
-                        key: Key(orden.idOrdenProduccion),
+                        key: Key(orden.id),
                         margin: EdgeInsets.symmetric(
                           vertical: 8,
                           horizontal: 5,
@@ -92,15 +92,14 @@ class _OrdenesProduccionScreenState extends State<OrdenesProduccionScreen> {
                               width: 100,
                               child: ChartBar(
                                   orden.cantidadUnidades,
-                                  orden.cantidadUnidades /
-                                      orden.cantidadOrdenProduccion,
-                                  orden.cantidadOrdenProduccion)),
+                                  orden.cantidadUnidades / orden.cantidad,
+                                  orden.cantidad)),
                           title: Text(
-                            '${orden.tipoProductoOrdenProduccion}',
+                            '${orden.tipoProducto}',
                             style: Theme.of(context).textTheme.headline6,
                           ),
                           subtitle: Text(
-                            orden.clienteOrdenProduccion,
+                            orden.cliente,
                             style: TextStyle(fontSize: 18),
                           ),
                           trailing: IconButton(

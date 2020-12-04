@@ -4,22 +4,22 @@ import 'ordenProduccion.dart';
 import 'package:flutter/material.dart';
 
 class OrdenCompra {
-  final String idOrdenCompra;
-  final String folioOrdenCompra;
+  final String id;
+  final String folio;
   //final DateTime fechaIngreso;
-  final int cantidadOrdenCompra;
-  final String tipoProductoOrdenCompra;
-  final String idClienteOrdenCompra;
-  EstadoOrdenCompra estadoOrdenCompra;
+  final int cantidad;
+  final String tipoProducto;
+  final String idCliente;
+  EstadoOrdenCompra estado;
 
   List<OrdenProduccion> ordenesProduccion = [];
 
   OrdenCompra({
-    @required this.cantidadOrdenCompra,
+    @required this.cantidad,
     //@required this.fechaIngreso,
-    @required this.folioOrdenCompra,
-    @required this.idOrdenCompra,
-    @required this.tipoProductoOrdenCompra,
-    @required this.idClienteOrdenCompra,
+    @required this.folio,
+    @required this.id,
+    @required this.tipoProducto,
+    @required this.idCliente,
   });
 }

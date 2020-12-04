@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "951545620115",
+    "project_id": "devopsmerida",
+    "storage_bucket": "devopsmerida.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:951545620115:android:40fdde5c30d0906eec8f66",
+        "android_client_info": {
+          "package_name": "com.example.prototipo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "951545620115-2ru22ohqbdgi062e6tqs62nc2ni718uc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAo6eSVKlb66jFXx-xvchwowAMoxozVo9c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "951545620115-2ru22ohqbdgi062e6tqs62nc2ni718uc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

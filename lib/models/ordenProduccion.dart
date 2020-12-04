@@ -3,24 +3,24 @@ import 'enums.dart';
 import 'package:flutter/material.dart';
 
 class OrdenProduccion {
-  final String idOrdenProduccion;
-  int cantidadOrdenProduccion;
+  final String id;
+  int cantidad;
   List<Despacho> despachos = [];
-  Estado estadoOrdenProduccion;
-  final String tipoProductoOrdenProduccion;
-  final String clienteOrdenProduccion;
+  Estado estado;
+  final String tipoProducto;
+  final String cliente;
   int cantidadCajas;
   int cantidadUnidades;
 
-  final String idOCOrdenProduccion;
+  final String idOC;
 
   OrdenProduccion({
-    @required this.idOrdenProduccion,
+    @required this.id,
     this.cantidadCajas = 0,
     this.cantidadUnidades = 0,
-    @required this.cantidadOrdenProduccion,
-    @required this.clienteOrdenProduccion,
-    @required this.tipoProductoOrdenProduccion,
-    @required this.idOCOrdenProduccion,
+    @required this.cantidad,
+    @required this.cliente,
+    @required this.tipoProducto,
+    @required this.idOC,
   });
 }

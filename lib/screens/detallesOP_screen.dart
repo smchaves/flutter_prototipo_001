@@ -29,7 +29,7 @@ class _DetallesOrdenProduccionScreenState
         ModalRoute.of(context).settings.arguments as OrdenProduccion;
     return Scaffold(
       appBar: AppBar(
-        title: Text('OP Cliente: ${ordenSeleccionada.clienteOrdenProduccion}'),
+        title: Text('OP Cliente: ${ordenSeleccionada.cliente}'),
       ),
       drawer: MainDrawer(),
       body: Column(
@@ -60,6 +60,7 @@ class _DetallesOrdenProduccionScreenState
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           widget.despachar(ordenSeleccionada);
+
           Navigator.of(context).pop();
         },
         child: Icon(Icons.send),
