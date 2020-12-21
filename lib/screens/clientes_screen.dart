@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:prototipo/screens/detalle_clientes_screen.dart';
 import '../widgets/main_drawer.dart';
 import '../models/clientes.dart';
 
@@ -28,6 +29,12 @@ class _ClientesScreenState extends State<ClientesScreen> {
               leading: Text(cliente.nombre),
               title: Text(cliente.direccion),
               subtitle: Text('Cantidad de OC: ${cliente.ordenesCompra.length}'),
+              onTap: () {
+                Navigator.of(context).pushReplacementNamed(
+                  DetalleClientesScreen.routeName,
+                  arguments: cliente,
+                );
+              },
             ),
           );
         }).toList(),

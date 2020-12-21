@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:prototipo/screens/detalle_despacho_screen.dart';
 import './screens/despachos_screen.dart';
 import './models/enums.dart';
 import './screens/clientes_screen.dart';
@@ -13,6 +14,8 @@ import 'package:intl/intl.dart';
 import './models/ordenProduccion.dart';
 import './screens/detallesOP_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
+import './screens/despachar_screen.dart';
+import './screens/detalle_clientes_screen.dart';
 
 void main() {
   runApp(MyApp());
@@ -177,7 +180,7 @@ class _MyAppState extends State<MyApp> {
             fechaDespacho: DateFormat.yMd().format(DateTime.now()),
             idOrdenProduccion: ordenProduccion.id,
             nombreCliente: clienteOrden.nombre);
-        nuevoDespacho.estadoDespacho = EstadoDespacho.NoIngresado;
+        //nuevoDespacho.estadoDespacho = EstadoDespacho.NoIngresado;
         ordenProduccion.despachos.add(nuevoDespacho);
         despachosNoIngresados.add(nuevoDespacho);
       });
@@ -201,7 +204,7 @@ class _MyAppState extends State<MyApp> {
             fechaDespacho: DateFormat.yMd().format(DateTime.now()),
             idOrdenProduccion: ordenProduccion.id,
             nombreCliente: clienteOrden.nombre);
-        nuevoDespacho.estadoDespacho = EstadoDespacho.NoIngresado;
+        //nuevoDespacho.estadoDespacho = EstadoDespacho.NoIngresado;
         ordenProduccion.despachos.add(nuevoDespacho);
         despachosNoIngresados.add(nuevoDespacho);
       });
@@ -222,6 +225,13 @@ class _MyAppState extends State<MyApp> {
     setState(() {
       ordenesProduccion.removeAt(index);
       listaClientes[index2].ordenesCompra.removeAt(index3);
+    });
+  }
+
+  void ingresarCosto(Despacho despacho, int costo) {
+    setState(() {
+      despacho.costoTotal = costo;
+      despacho.estadoDespacho = EstadoDespacho.Ingresado;
     });
   }
 
@@ -264,6 +274,10 @@ class _MyAppState extends State<MyApp> {
                   ClientesScreen(listaClientes, _startAddClient),
               DespachosScreen.routeName: (ctx) =>
                   DespachosScreen(despachosNoIngresados),
+              DespacharScreen.routeName: (ctx) => DespacharScreen(despachar),
+              DetalleClientesScreen.routeName: (ctx) => DetalleClientesScreen(),
+              DetallesDespachoScreen.routeName: (ctx) =>
+                  DetallesDespachoScreen(ingresarCosto),
             },
           );
         });

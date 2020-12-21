@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../models/ordenProduccion.dart';
 import '../widgets/main_drawer.dart';
+import './despachar_screen.dart';
 //import 'package:firebase_core/firebase_core.dart';
 
 class DetallesOrdenProduccionScreen extends StatefulWidget {
@@ -61,16 +62,20 @@ class _DetallesOrdenProduccionScreenState
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          widget.despachar(ordenSeleccionada);
+          ordenSeleccionada.cantidadUnidades != 0
+              ? Navigator.of(context).pushReplacementNamed(
+                  DespacharScreen.routeName,
+                  arguments: ordenSeleccionada,
+                )
+              : null;
           FirebaseFirestore.instance
               .collection('Cliente')
               .snapshots()
               .listen((data) {
             print(data.docs[0].id);
           });
-          Navigator.of(context).pop();
         },
-        child: Icon(Icons.send),
+        child: Icon(Icons.traffic_rounded),
       ),
     );
   }

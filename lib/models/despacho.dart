@@ -9,6 +9,7 @@ class Despacho {
   final String idOrdenProduccion;
   EstadoDespacho estadoDespacho;
   final String nombreCliente;
+  int costoTotal;
 
   Despacho({
     @required this.cantidadDespacho,
@@ -16,5 +17,7 @@ class Despacho {
     @required this.fechaDespacho,
     @required this.idOrdenProduccion,
     @required this.nombreCliente,
+    this.costoTotal = 0,
+    this.estadoDespacho = EstadoDespacho.NoIngresado,
   });
 }
