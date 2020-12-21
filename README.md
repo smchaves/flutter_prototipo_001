@@ -25,6 +25,9 @@ Una vez descarguemos el archivo APK, lo siguiente que tendremos que hacer es ins
 -  <b>_clientes_screen_</b>: Diseño de la página de clientes. Permite agregar nuevos clientes.
 -  <b>_despachos_screen.dart_</b>: Diseño de la página de despachos. Permite visualizar los despachos activos.
 -  <b>_detallesOP_screen.dart_</b>: Diseño de la pantalla de resumen de OP. Permite modificar el progreso de la OP y ejecutar su despacho.
+-  <b>_despachar_screen.dart_</b>: Diseño de la pantalla de resumen de despacho. Permite visualizar los datos finales del despacho para su confirmación.
+-  <b>_detalle_despacho_screen.dart_</b>: Diseño de la pantalla de detalle de despacho. Permite ingresar el costo total del despacho para su actualización y cambio de estado a 'Ingresado'.
+-  <b>_detalle_clientes_screen.dart_</b>: Diseño de la pantalla de detalle de cliente. Permite visualizar el historial de órdenes de compra del cliente seleccionado, para revisar si están completadas o aun están activas.
 
 ### Widgets
 -  <b>_add_cliente.dart_</b>: Widget que permite agregar nuevos clientes.
